@@ -266,14 +266,15 @@ namespace UAV_Security_System
                 long lon_long = (long)(lon_float * 10000000);
                 if (lat_float >= -90 && lat_float <= 90 && lon_float >= -180 && lon_float <= 180)
                 {
-                    string s1 = "{\"type\":\"sleep\",\"name\":\"" + tempName + "\"}#";
-                    serialPortSensor.Write(s1);
-                    string s2 = "{\"type\":\"sleep\",\"num\":" + tempNum + "}#";
-                    serialPortSensor.Write(s2);
+                    serialPortSensor.Write("{\"type\":\"sleep\",\"name\":\"" + tempName + "\"}#");
+                    serialPortSensor.Write("{\"type\":\"set_num\",\"num\":" + tempNum + "}#");
                     Sensor tempSensor = new Sensor(tempName, tempNum, lat_long, lon_long, true, tempVol, 0, 0);
-                    string s3 = "{\"type\":\"add_sensor\"," + tempSensor.getStringForAdd() + "}#";
-                    serialPortServer.Write(s3);
+                    serialPortServer.Write("{\"type\":\"add_sensor\"," + tempSensor.getStringForAdd() + "}#");
                     Clear_the_add_sensor_form();
+                }
+                else
+                {
+                    MessageBox.Show("lat может принимать значения от -90 до 90; lon - от -180 до 180!");
                 }
             }
             catch
