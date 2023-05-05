@@ -162,7 +162,6 @@
             button_cancel_connect_sensor.TabIndex = 10;
             button_cancel_connect_sensor.Text = "Отмена";
             button_cancel_connect_sensor.UseVisualStyleBackColor = true;
-            button_cancel_connect_sensor.Visible = false;
             button_cancel_connect_sensor.Click += button_cancel_connect_sensor_Click;
             // 
             // groupBox_new_sensor
@@ -250,9 +249,9 @@
             // 
             label_sensor_loading_warning.Location = new Point(102, 108);
             label_sensor_loading_warning.Name = "label_sensor_loading_warning";
-            label_sensor_loading_warning.Size = new Size(142, 68);
+            label_sensor_loading_warning.Size = new Size(142, 80);
             label_sensor_loading_warning.TabIndex = 13;
-            label_sensor_loading_warning.Text = "Если загрузка занимает много времени - нажмите \"Отмена\" и попробуйте еще раз";
+            label_sensor_loading_warning.Text = "Если загрузка занимает много времени или произошла ошибка - нажмите \"Отмена\" и попробуйте еще раз";
             label_sensor_loading_warning.TextAlign = ContentAlignment.TopCenter;
             label_sensor_loading_warning.Visible = false;
             // 

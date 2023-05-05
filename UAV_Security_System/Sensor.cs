@@ -103,7 +103,19 @@ namespace UAV_Security_System
 
         public string getString()
         {
-            return name + "; " + num + "; " + lat + "; " + lon + "; " + isSleeping + "; " + vol + "; " + batteryFlag + "; " + connectionFlag + ".";
+            return name + "; " + num + "; " + (lat / 10000000f) + "; " + (lon / 10000000f) + "; " + isSleeping + "; " + vol + "; " + batteryFlag + "; " + connectionFlag + ".";
+        }
+
+        public string getStringForAdd()
+        {
+            string sleep = "false";
+            if (isSleeping)
+            {
+                sleep = "true";
+            }
+            string vol_str = vol.ToString();
+            vol_str = vol_str.Replace(",", ".");
+            return "\"name\":\"" + name + "\",\"num\":" + num + ",\"lat\":" + lat + ",\"lon\":" + lon + ",\"isSleeping\":" + sleep + ",\"vol\":" + vol_str + "";
         }
     }
 }
