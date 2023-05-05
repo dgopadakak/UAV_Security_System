@@ -40,6 +40,8 @@
             button_accept_sensor_com = new Button();
             button_cancel_connect_sensor = new Button();
             groupBox_new_sensor = new GroupBox();
+            label_new_sensor_vol = new Label();
+            label_new_sensor_name = new Label();
             groupBox_new_sensor.SuspendLayout();
             SuspendLayout();
             // 
@@ -111,7 +113,6 @@
             button_add_sensor.TabIndex = 6;
             button_add_sensor.Text = "Добавить АУО";
             button_add_sensor.UseVisualStyleBackColor = true;
-            //button_add_sensor.Visible = false;
             button_add_sensor.Click += button_add_sensor_Click;
             // 
             // comboBox_sensor_com
@@ -159,6 +160,8 @@
             // 
             // groupBox_new_sensor
             // 
+            groupBox_new_sensor.Controls.Add(label_new_sensor_vol);
+            groupBox_new_sensor.Controls.Add(label_new_sensor_name);
             groupBox_new_sensor.Controls.Add(button_add_sensor);
             groupBox_new_sensor.Controls.Add(button_cancel_connect_sensor);
             groupBox_new_sensor.Controls.Add(comboBox_sensor_com);
@@ -171,6 +174,26 @@
             groupBox_new_sensor.TabStop = false;
             groupBox_new_sensor.Text = "Добавление АУО";
             groupBox_new_sensor.Visible = false;
+            // 
+            // label_new_sensor_vol
+            // 
+            label_new_sensor_vol.AutoSize = true;
+            label_new_sensor_vol.Location = new Point(102, 121);
+            label_new_sensor_vol.Name = "label_new_sensor_vol";
+            label_new_sensor_vol.Size = new Size(23, 15);
+            label_new_sensor_vol.TabIndex = 12;
+            label_new_sensor_vol.Text = "vol";
+            label_new_sensor_vol.Visible = false;
+            // 
+            // label_new_sensor_name
+            // 
+            label_new_sensor_name.AutoSize = true;
+            label_new_sensor_name.Location = new Point(102, 106);
+            label_new_sensor_name.Name = "label_new_sensor_name";
+            label_new_sensor_name.Size = new Size(37, 15);
+            label_new_sensor_name.TabIndex = 11;
+            label_new_sensor_name.Text = "name";
+            label_new_sensor_name.Visible = false;
             // 
             // Form1
             // 
@@ -188,6 +211,7 @@
             Text = "Управляющая программа";
             FormClosing += Form1_FormClosing;
             groupBox_new_sensor.ResumeLayout(false);
+            groupBox_new_sensor.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -206,5 +230,7 @@
         private Button button_accept_sensor_com;
         private Button button_cancel_connect_sensor;
         private GroupBox groupBox_new_sensor;
+        private Label label_new_sensor_vol;
+        private Label label_new_sensor_name;
     }
 }

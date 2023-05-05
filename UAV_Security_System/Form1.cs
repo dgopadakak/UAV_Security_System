@@ -12,7 +12,9 @@ namespace UAV_Security_System
         private SerialPort? serialPortSensor;
         private List<Sensor?> sensorsList = new List<Sensor?>();
         private string inStringServer = "";
-        private string inStringSensor= "";
+        private string inStringSensor = "";
+        private string tempName;
+        private float tempVol;
 
         public Form1()
         {
@@ -53,9 +55,10 @@ namespace UAV_Security_System
                     label_selected_com.Text = "Выбранный порт: " + selected_com_port;
                     serialPortServer = new SerialPort(selected_com_port, 9600);
                     serialPortServer.Open();
-                    serialPortServer.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+                    serialPortServer.DataReceived += new SerialDataReceivedEventHandler(ServerDataReceivedHandler);
                     Thread.Sleep(1000);
                     serialPortServer.Write("{\"type\":\"get_all_sensors\"}#");
+
                     comboBox1.Visible = false;
                     button_update_com1.Visible = false;
                     button_accept_com.Visible = false;
@@ -75,21 +78,21 @@ namespace UAV_Security_System
             }
         }
 
-        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        private void ServerDataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort sp = (SerialPort)sender;
             inStringServer += sp.ReadExisting();
-            Parse_data();
+            Parse_server_data();
         }
 
-        private void Parse_data()
+        private void Parse_server_data()
         {
             if (inStringServer.IndexOf("#") != -1)
             {
                 String command = inStringServer.Substring(0, inStringServer.IndexOf("#"));
                 inStringServer = inStringServer.Substring(inStringServer.IndexOf("#") + 1);
 
-                if (command.IndexOf("$") != -1)         // Пришли данные о датчиках
+                if (command.IndexOf("$") != -1)         // Пришли данные о всех датчиках
                 {
                     int num = Int32.Parse(command.Substring(0, command.IndexOf("$")));
                     command = command.Substring(command.IndexOf("$") + 1);
@@ -134,18 +137,52 @@ namespace UAV_Security_System
             {
                 try
                 {
+                    serialPortSensor = new SerialPort(comboBox_sensor_com.SelectedItem.ToString(), 9600);
+                    serialPortSensor.Open();
+                    serialPortSensor.DataReceived += new SerialDataReceivedEventHandler(SensorDataReceivedHandler);
+                    Thread.Sleep(1000);
+                    serialPortSensor.Write("{\"type\":\"get_data_for_connect\"}#");
+
                     comboBox_sensor_com.Enabled = false;
                     button_update_com2.Enabled = false;
                     button_accept_sensor_com.Enabled = false;
                 }
                 catch
                 {
-
+                    MessageBox.Show("Неполадки с выбранным портом!");
                 }
             }
             else
             {
                 MessageBox.Show("Выберите COM порт!");
+            }
+        }
+
+        private void SensorDataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort sp = (SerialPort)sender;
+            inStringSensor += sp.ReadExisting();
+            Parse_sensor_data();
+        }
+
+        private void Parse_sensor_data()
+        {
+            if (inStringSensor.IndexOf("#") != -1)
+            {
+                String command = inStringSensor.Substring(0, inStringSensor.IndexOf("#"));
+                inStringSensor = inStringSensor.Substring(inStringSensor.IndexOf("#") + 1);
+
+                if (command.IndexOf("$") != -1)         // Пришли данные имени и напряжения датчика
+                {
+                    tempName = command.Substring(0, command.IndexOf("$"));
+                    command = command.Substring(command.IndexOf("$") + 1);
+                    command = command.Replace(".", ",");
+                    tempVol = float.Parse(command.Substring(0, command.IndexOf("$")));
+                    label_new_sensor_name.Invoke(() => label_new_sensor_name.Text = "Имя: " + tempName);
+                    label_new_sensor_vol.Invoke(() => label_new_sensor_vol.Text = "Напряжение: " + tempVol.ToString());
+                    label_new_sensor_name.Invoke(() => label_new_sensor_name.Visible = true);
+                    label_new_sensor_vol.Invoke(() => label_new_sensor_vol.Visible = true);
+                }
             }
         }
 
