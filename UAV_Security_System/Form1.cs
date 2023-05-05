@@ -56,7 +56,7 @@ namespace UAV_Security_System
                     serialPortServer = new SerialPort(selected_com_port, 9600);
                     serialPortServer.Open();
                     serialPortServer.DataReceived += new SerialDataReceivedEventHandler(ServerDataReceivedHandler);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(1100);
                     serialPortServer.Write("{\"type\":\"get_all_sensors\"}#");
 
                     comboBox1.Visible = false;
@@ -65,7 +65,7 @@ namespace UAV_Security_System
                     listBox1.Visible = true;
                     button1.Visible = true;
                     label_selected_com.Visible = true;
-                    groupBox_new_sensor.Visible = true;
+                    button_add_sensor.Visible = true;
                 }
                 catch
                 {
@@ -124,10 +124,8 @@ namespace UAV_Security_System
         private void button_add_sensor_Click(object sender, EventArgs e)
         {
             update_com_ports();
-            button_add_sensor.Enabled = false;
-            comboBox_sensor_com.Visible = true;
-            button_update_com2.Visible = true;
-            button_accept_sensor_com.Visible = true;
+            button_add_sensor.Visible = false;
+            groupBox_new_sensor.Visible = true;
             button_cancel_connect_sensor.Visible = true;
         }
 
@@ -137,15 +135,16 @@ namespace UAV_Security_System
             {
                 try
                 {
-                    serialPortSensor = new SerialPort(comboBox_sensor_com.SelectedItem.ToString(), 9600);
-                    serialPortSensor.Open();
-                    serialPortSensor.DataReceived += new SerialDataReceivedEventHandler(SensorDataReceivedHandler);
-                    Thread.Sleep(1000);
-                    serialPortSensor.Write("{\"type\":\"get_data_for_connect\"}#");
-
                     comboBox_sensor_com.Enabled = false;
                     button_update_com2.Enabled = false;
                     button_accept_sensor_com.Enabled = false;
+                    label_sensor_loading_warning.Visible = true;
+
+                    serialPortSensor = new SerialPort(comboBox_sensor_com.SelectedItem.ToString(), 9600);
+                    serialPortSensor.Open();
+                    serialPortSensor.DataReceived += new SerialDataReceivedEventHandler(SensorDataReceivedHandler);
+                    Thread.Sleep(1500);
+                    serialPortSensor.Write("{\"type\":\"get_data_for_connect\"}#");
                 }
                 catch
                 {
@@ -178,16 +177,55 @@ namespace UAV_Security_System
                     command = command.Substring(command.IndexOf("$") + 1);
                     command = command.Replace(".", ",");
                     tempVol = float.Parse(command.Substring(0, command.IndexOf("$")));
+
+                    bool numFound = false;
+                    int num = 0;
+                    while (!numFound)
+                    {
+                        numFound = true;
+                        num++;
+                        for (int i = 0; i < sensorsList.Count; i++)
+                        {
+                            if (sensorsList[i].getNum() == num)
+                            {
+                                numFound = false;
+                            }
+                        }
+                    }
+
                     label_new_sensor_name.Invoke(() => label_new_sensor_name.Text = "Имя: " + tempName);
+                    label_num_of_new_sensor.Invoke(() => label_num_of_new_sensor.Text = "Номер: " + num);
                     label_new_sensor_vol.Invoke(() => label_new_sensor_vol.Text = "Напряжение: " + tempVol.ToString());
                     label_new_sensor_name.Invoke(() => label_new_sensor_name.Visible = true);
+                    label_num_of_new_sensor.Invoke(() => label_num_of_new_sensor.Visible = true);
                     label_new_sensor_vol.Invoke(() => label_new_sensor_vol.Visible = true);
+
+                    label_sensor_loading_warning.Invoke(() => label_sensor_loading_warning.Visible = false);
+
+                    label_lat.Invoke(() => label_lat.Visible = true);
+                    label_lon.Invoke(() => label_lon.Visible = true);
+                    textBox_lat.Invoke(() => textBox_lat.Visible = true);
+                    textBox_lon.Invoke(() => textBox_lon.Visible = true);
+
+                    button_new_sensor_done.Invoke(() => button_new_sensor_done.Visible = true);
                 }
             }
         }
 
+        private void button_new_sensor_done_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void button_cancel_connect_sensor_Click(object sender, EventArgs e)
         {
+            if (serialPortSensor != null)
+            {
+                if (serialPortSensor.IsOpen)
+                {
+                    serialPortSensor.Close();
+                }
+            }
 
         }
     }
