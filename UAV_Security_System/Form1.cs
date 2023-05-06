@@ -4,7 +4,6 @@ using System.Threading;
 using System.Text.Json;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
-using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace UAV_Security_System
 {
@@ -127,7 +126,7 @@ namespace UAV_Security_System
 
                 if (command == "OK+DEL")
                 {
-
+                    do_info_toast("АУО успешно удалено!", "Теперь его можно добавить заново");
                 }
             }
         }
@@ -262,7 +261,6 @@ namespace UAV_Security_System
                     if (command == "OK+" + tempNum)
                     {
                         do_info_toast("Установка номера АУО прошла успешно!", "Теперь АУО готово к общению");
-                        MessageBox.Show("Установка номера прошла успешно!");
                     }
                 }
             }
@@ -345,8 +343,9 @@ namespace UAV_Security_System
         {
             if (dataGridViewSensors.SelectedRows.Count > 0)
             {
-                int selectedSensor = Int32.Parse(dataGridViewSensors.CurrentRow.Cells[0].Value.ToString());
-                MessageBox.Show("Сейчас удалилось бы АУО с номером: " + selectedSensor.ToString());
+                int selectedSensorNum = Int32.Parse(dataGridViewSensors.CurrentRow.Cells[0].Value.ToString());
+                serialPortServer.Write("{\"type\":\"del_sensor\",\"num\":" + selectedSensorNum + "}#");
+                serialPortServer.Write("{\"type\":\"get_all_sensors\"}#");
             }
         }
 
@@ -354,8 +353,8 @@ namespace UAV_Security_System
         {
             if (dataGridViewSensors.SelectedRows.Count > 0)
             {
-                int selectedSensor = Int32.Parse(dataGridViewSensors.CurrentRow.Cells[0].Value.ToString());
-                MessageBox.Show("Сейчас началось бы изменение АУО с номером: " + selectedSensor.ToString());
+                int selectedSensorNum = Int32.Parse(dataGridViewSensors.CurrentRow.Cells[0].Value.ToString());
+                MessageBox.Show("Сейчас началось бы изменение АУО с номером: " + selectedSensorNum.ToString());
             }
         }
 
@@ -372,7 +371,7 @@ namespace UAV_Security_System
             NI.BalloonTipIcon = ToolTipIcon.Info;
             NI.Icon = Icon;
             NI.Visible = true;
-            NI.ShowBalloonTip(5);   // Что за число? На время не похоже
+            NI.ShowBalloonTip(2);
         }
     }
 }
