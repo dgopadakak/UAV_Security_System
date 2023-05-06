@@ -30,7 +30,6 @@
         {
             components = new System.ComponentModel.Container();
             button1 = new Button();
-            listBox1 = new ListBox();
             comboBox1 = new ComboBox();
             button_update_com1 = new Button();
             button_accept_com = new Button();
@@ -51,29 +50,33 @@
             label_new_sensor_vol = new Label();
             label_new_sensor_name = new Label();
             toolTip1 = new ToolTip(components);
+            dataGridViewSensors = new DataGridView();
+            ColumnNUM = new DataGridViewTextBoxColumn();
+            ColumnName = new DataGridViewTextBoxColumn();
+            ColumnIsSleeping = new DataGridViewTextBoxColumn();
+            ColumnLat = new DataGridViewTextBoxColumn();
+            ColumnLon = new DataGridViewTextBoxColumn();
+            ColumnVol = new DataGridViewTextBoxColumn();
+            ColumnBatteryFlag = new DataGridViewTextBoxColumn();
+            ColumnConnectionFlag = new DataGridViewTextBoxColumn();
+            groupBox1 = new GroupBox();
+            button_del_sensor = new Button();
+            button_edit_sensor = new Button();
+            button_del_all_sensors = new Button();
             groupBox_new_sensor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewSensors).BeginInit();
             SuspendLayout();
             // 
             // button1
             // 
-            button1.Location = new Point(310, 441);
+            button1.Location = new Point(12, 523);
             button1.Name = "button1";
-            button1.Size = new Size(245, 23);
+            button1.Size = new Size(119, 23);
             button1.TabIndex = 0;
-            button1.Text = "Запросить датчики";
+            button1.Text = "Обновить список";
             button1.UseVisualStyleBackColor = true;
             button1.Visible = false;
             button1.Click += button1_Click;
-            // 
-            // listBox1
-            // 
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 15;
-            listBox1.Location = new Point(310, 101);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(245, 334);
-            listBox1.TabIndex = 1;
-            listBox1.Visible = false;
             // 
             // comboBox1
             // 
@@ -116,9 +119,9 @@
             // 
             // button_add_sensor
             // 
-            button_add_sensor.Location = new Point(730, 16);
+            button_add_sensor.Location = new Point(571, 12);
             button_add_sensor.Name = "button_add_sensor";
-            button_add_sensor.Size = new Size(142, 23);
+            button_add_sensor.Size = new Size(96, 23);
             button_add_sensor.TabIndex = 6;
             button_add_sensor.Text = "Добавить АУО";
             button_add_sensor.UseVisualStyleBackColor = true;
@@ -128,7 +131,7 @@
             // comboBox_sensor_com
             // 
             comboBox_sensor_com.FormattingEnabled = true;
-            comboBox_sensor_com.Location = new Point(102, 23);
+            comboBox_sensor_com.Location = new Point(87, 22);
             comboBox_sensor_com.Name = "comboBox_sensor_com";
             comboBox_sensor_com.Size = new Size(142, 23);
             comboBox_sensor_com.TabIndex = 7;
@@ -136,7 +139,7 @@
             // 
             // button_update_com2
             // 
-            button_update_com2.Location = new Point(21, 23);
+            button_update_com2.Location = new Point(6, 22);
             button_update_com2.Name = "button_update_com2";
             button_update_com2.Size = new Size(75, 23);
             button_update_com2.TabIndex = 8;
@@ -146,7 +149,7 @@
             // 
             // button_accept_sensor_com
             // 
-            button_accept_sensor_com.Location = new Point(102, 52);
+            button_accept_sensor_com.Location = new Point(87, 51);
             button_accept_sensor_com.Name = "button_accept_sensor_com";
             button_accept_sensor_com.Size = new Size(142, 23);
             button_accept_sensor_com.TabIndex = 9;
@@ -156,7 +159,7 @@
             // 
             // button_cancel_connect_sensor
             // 
-            button_cancel_connect_sensor.Location = new Point(102, 211);
+            button_cancel_connect_sensor.Location = new Point(87, 210);
             button_cancel_connect_sensor.Name = "button_cancel_connect_sensor";
             button_cancel_connect_sensor.Size = new Size(142, 23);
             button_cancel_connect_sensor.TabIndex = 10;
@@ -179,9 +182,9 @@
             groupBox_new_sensor.Controls.Add(comboBox_sensor_com);
             groupBox_new_sensor.Controls.Add(button_accept_sensor_com);
             groupBox_new_sensor.Controls.Add(button_update_com2);
-            groupBox_new_sensor.Location = new Point(606, 12);
+            groupBox_new_sensor.Location = new Point(723, 12);
             groupBox_new_sensor.Name = "groupBox_new_sensor";
-            groupBox_new_sensor.Size = new Size(266, 243);
+            groupBox_new_sensor.Size = new Size(239, 244);
             groupBox_new_sensor.TabIndex = 11;
             groupBox_new_sensor.TabStop = false;
             groupBox_new_sensor.Text = "Добавление АУО";
@@ -189,7 +192,7 @@
             // 
             // button_new_sensor_done
             // 
-            button_new_sensor_done.Location = new Point(102, 182);
+            button_new_sensor_done.Location = new Point(87, 181);
             button_new_sensor_done.Name = "button_new_sensor_done";
             button_new_sensor_done.Size = new Size(142, 23);
             button_new_sensor_done.TabIndex = 12;
@@ -201,7 +204,7 @@
             // label_num_of_new_sensor
             // 
             label_num_of_new_sensor.AutoSize = true;
-            label_num_of_new_sensor.Location = new Point(102, 93);
+            label_num_of_new_sensor.Location = new Point(87, 92);
             label_num_of_new_sensor.Name = "label_num_of_new_sensor";
             label_num_of_new_sensor.Size = new Size(32, 15);
             label_num_of_new_sensor.TabIndex = 16;
@@ -212,7 +215,7 @@
             // label_lon
             // 
             label_lon.AutoSize = true;
-            label_lon.Location = new Point(102, 156);
+            label_lon.Location = new Point(87, 155);
             label_lon.Name = "label_lon";
             label_lon.Size = new Size(27, 15);
             label_lon.TabIndex = 15;
@@ -222,7 +225,7 @@
             // label_lat
             // 
             label_lat.AutoSize = true;
-            label_lat.Location = new Point(102, 129);
+            label_lat.Location = new Point(87, 128);
             label_lat.Name = "label_lat";
             label_lat.Size = new Size(23, 15);
             label_lat.TabIndex = 14;
@@ -231,7 +234,7 @@
             // 
             // textBox_lon
             // 
-            textBox_lon.Location = new Point(131, 153);
+            textBox_lon.Location = new Point(116, 152);
             textBox_lon.Name = "textBox_lon";
             textBox_lon.Size = new Size(113, 23);
             textBox_lon.TabIndex = 12;
@@ -239,7 +242,7 @@
             // 
             // textBox_lat
             // 
-            textBox_lat.Location = new Point(131, 126);
+            textBox_lat.Location = new Point(116, 125);
             textBox_lat.Name = "textBox_lat";
             textBox_lat.Size = new Size(113, 23);
             textBox_lat.TabIndex = 12;
@@ -247,7 +250,7 @@
             // 
             // label_sensor_loading_warning
             // 
-            label_sensor_loading_warning.Location = new Point(102, 108);
+            label_sensor_loading_warning.Location = new Point(87, 107);
             label_sensor_loading_warning.Name = "label_sensor_loading_warning";
             label_sensor_loading_warning.Size = new Size(142, 80);
             label_sensor_loading_warning.TabIndex = 13;
@@ -258,7 +261,7 @@
             // label_new_sensor_vol
             // 
             label_new_sensor_vol.AutoSize = true;
-            label_new_sensor_vol.Location = new Point(102, 108);
+            label_new_sensor_vol.Location = new Point(87, 107);
             label_new_sensor_vol.Name = "label_new_sensor_vol";
             label_new_sensor_vol.Size = new Size(23, 15);
             label_new_sensor_vol.TabIndex = 12;
@@ -268,31 +271,176 @@
             // label_new_sensor_name
             // 
             label_new_sensor_name.AutoSize = true;
-            label_new_sensor_name.Location = new Point(102, 78);
+            label_new_sensor_name.Location = new Point(87, 77);
             label_new_sensor_name.Name = "label_new_sensor_name";
             label_new_sensor_name.Size = new Size(37, 15);
             label_new_sensor_name.TabIndex = 11;
             label_new_sensor_name.Text = "name";
             label_new_sensor_name.Visible = false;
             // 
+            // dataGridViewSensors
+            // 
+            dataGridViewSensors.AllowUserToAddRows = false;
+            dataGridViewSensors.AllowUserToDeleteRows = false;
+            dataGridViewSensors.AllowUserToOrderColumns = true;
+            dataGridViewSensors.AllowUserToResizeColumns = false;
+            dataGridViewSensors.AllowUserToResizeRows = false;
+            dataGridViewSensors.BackgroundColor = SystemColors.Control;
+            dataGridViewSensors.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewSensors.Columns.AddRange(new DataGridViewColumn[] { ColumnNUM, ColumnName, ColumnIsSleeping, ColumnLat, ColumnLon, ColumnVol, ColumnBatteryFlag, ColumnConnectionFlag });
+            dataGridViewSensors.Location = new Point(12, 41);
+            dataGridViewSensors.MultiSelect = false;
+            dataGridViewSensors.Name = "dataGridViewSensors";
+            dataGridViewSensors.RowHeadersVisible = false;
+            dataGridViewSensors.RowTemplate.Height = 25;
+            dataGridViewSensors.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewSensors.Size = new Size(655, 476);
+            dataGridViewSensors.TabIndex = 12;
+            dataGridViewSensors.Visible = false;
+            dataGridViewSensors.SelectionChanged += dataGridViewSensors_SelectionChanged;
+            // 
+            // ColumnNUM
+            // 
+            ColumnNUM.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            ColumnNUM.HeaderText = "№";
+            ColumnNUM.Name = "ColumnNUM";
+            ColumnNUM.ReadOnly = true;
+            ColumnNUM.Resizable = DataGridViewTriState.False;
+            ColumnNUM.Width = 45;
+            // 
+            // ColumnName
+            // 
+            ColumnName.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            ColumnName.HeaderText = "Имя";
+            ColumnName.Name = "ColumnName";
+            ColumnName.ReadOnly = true;
+            ColumnName.Resizable = DataGridViewTriState.False;
+            ColumnName.Width = 56;
+            // 
+            // ColumnIsSleeping
+            // 
+            ColumnIsSleeping.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            ColumnIsSleeping.HeaderText = "Спящий режим";
+            ColumnIsSleeping.Name = "ColumnIsSleeping";
+            ColumnIsSleeping.ReadOnly = true;
+            ColumnIsSleeping.Resizable = DataGridViewTriState.False;
+            ColumnIsSleeping.Width = 109;
+            // 
+            // ColumnLat
+            // 
+            ColumnLat.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            ColumnLat.HeaderText = "lat";
+            ColumnLat.Name = "ColumnLat";
+            ColumnLat.ReadOnly = true;
+            ColumnLat.Resizable = DataGridViewTriState.False;
+            ColumnLat.Width = 45;
+            // 
+            // ColumnLon
+            // 
+            ColumnLon.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            ColumnLon.HeaderText = "lon";
+            ColumnLon.Name = "ColumnLon";
+            ColumnLon.ReadOnly = true;
+            ColumnLon.Resizable = DataGridViewTriState.False;
+            ColumnLon.Width = 49;
+            // 
+            // ColumnVol
+            // 
+            ColumnVol.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            ColumnVol.HeaderText = "Напряжение";
+            ColumnVol.Name = "ColumnVol";
+            ColumnVol.ReadOnly = true;
+            ColumnVol.Resizable = DataGridViewTriState.False;
+            ColumnVol.Width = 102;
+            // 
+            // ColumnBatteryFlag
+            // 
+            ColumnBatteryFlag.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            ColumnBatteryFlag.HeaderText = "Аккумулятор";
+            ColumnBatteryFlag.Name = "ColumnBatteryFlag";
+            ColumnBatteryFlag.ReadOnly = true;
+            ColumnBatteryFlag.Resizable = DataGridViewTriState.False;
+            ColumnBatteryFlag.Width = 105;
+            // 
+            // ColumnConnectionFlag
+            // 
+            ColumnConnectionFlag.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            ColumnConnectionFlag.HeaderText = "Связь";
+            ColumnConnectionFlag.Name = "ColumnConnectionFlag";
+            ColumnConnectionFlag.ReadOnly = true;
+            ColumnConnectionFlag.Resizable = DataGridViewTriState.False;
+            ColumnConnectionFlag.Width = 63;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Location = new Point(723, 262);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(239, 153);
+            groupBox1.TabIndex = 13;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "groupBox1";
+            // 
+            // button_del_sensor
+            // 
+            button_del_sensor.Enabled = false;
+            button_del_sensor.Location = new Point(318, 523);
+            button_del_sensor.Name = "button_del_sensor";
+            button_del_sensor.Size = new Size(168, 23);
+            button_del_sensor.TabIndex = 14;
+            button_del_sensor.Text = "Удалить выделенное АУО";
+            button_del_sensor.UseVisualStyleBackColor = true;
+            button_del_sensor.Visible = false;
+            button_del_sensor.Click += button_del_sensor_Click;
+            // 
+            // button_edit_sensor
+            // 
+            button_edit_sensor.Enabled = false;
+            button_edit_sensor.Location = new Point(137, 523);
+            button_edit_sensor.Name = "button_edit_sensor";
+            button_edit_sensor.Size = new Size(175, 23);
+            button_edit_sensor.TabIndex = 15;
+            button_edit_sensor.Text = "Изменить выделенное АУО";
+            button_edit_sensor.UseVisualStyleBackColor = true;
+            button_edit_sensor.Visible = false;
+            button_edit_sensor.Click += button_edit_sensor_Click;
+            // 
+            // button_del_all_sensors
+            // 
+            button_del_all_sensors.Location = new Point(492, 523);
+            button_del_all_sensors.Name = "button_del_all_sensors";
+            button_del_all_sensors.Size = new Size(175, 23);
+            button_del_all_sensors.TabIndex = 16;
+            button_del_all_sensors.Text = "Удалить все АУО";
+            button_del_all_sensors.UseVisualStyleBackColor = true;
+            button_del_all_sensors.Visible = false;
+            button_del_all_sensors.Click += button_del_all_sensors_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(884, 561);
+            ClientSize = new Size(974, 621);
+            Controls.Add(button_del_all_sensors);
+            Controls.Add(button_edit_sensor);
+            Controls.Add(button_del_sensor);
+            Controls.Add(groupBox1);
+            Controls.Add(dataGridViewSensors);
             Controls.Add(groupBox_new_sensor);
             Controls.Add(label_selected_com);
             Controls.Add(button_accept_com);
             Controls.Add(button_update_com1);
             Controls.Add(comboBox1);
-            Controls.Add(listBox1);
             Controls.Add(button1);
             Controls.Add(button_add_sensor);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "Form1";
+            RightToLeftLayout = true;
             Text = "Управляющая программа";
             FormClosing += Form1_FormClosing;
             groupBox_new_sensor.ResumeLayout(false);
             groupBox_new_sensor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewSensors).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -300,7 +448,6 @@
         #endregion
 
         private Button button1;
-        private ListBox listBox1;
         private ComboBox comboBox1;
         private Button button_update_com1;
         private Button button_accept_com;
@@ -327,5 +474,18 @@
         }
 
         private Button button_new_sensor_done;
+        private DataGridView dataGridViewSensors;
+        private GroupBox groupBox1;
+        private Button button_del_sensor;
+        private Button button_edit_sensor;
+        private Button button_del_all_sensors;
+        private DataGridViewTextBoxColumn ColumnNUM;
+        private DataGridViewTextBoxColumn ColumnName;
+        private DataGridViewTextBoxColumn ColumnIsSleeping;
+        private DataGridViewTextBoxColumn ColumnLat;
+        private DataGridViewTextBoxColumn ColumnLon;
+        private DataGridViewTextBoxColumn ColumnVol;
+        private DataGridViewTextBoxColumn ColumnBatteryFlag;
+        private DataGridViewTextBoxColumn ColumnConnectionFlag;
     }
 }

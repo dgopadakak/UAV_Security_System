@@ -68,9 +68,12 @@ namespace UAV_Security_System
                     comboBox1.Visible = false;
                     button_update_com1.Visible = false;
                     button_accept_com.Visible = false;
-                    listBox1.Visible = true;
+                    dataGridViewSensors.Visible = true;
                     button1.Visible = true;
                     label_selected_com.Visible = true;
+                    button_del_sensor.Visible = true;
+                    button_del_all_sensors.Visible = true;
+                    button_edit_sensor.Visible = true;
                     button_add_sensor.Visible = true;
                 }
                 catch
@@ -102,7 +105,7 @@ namespace UAV_Security_System
                 {
                     int num = Int32.Parse(command.Substring(0, command.IndexOf("$")));
                     command = command.Substring(command.IndexOf("$") + 1);
-                    listBox1.Invoke(listBox1.Items.Clear);
+                    dataGridViewSensors.Invoke(() => dataGridViewSensors.Rows.Clear());
                     sensorsList.Clear();
                     for (int i = 0; i < num; i++)
                     {
@@ -111,7 +114,7 @@ namespace UAV_Security_System
                         sensorsList.Add(JsonConvert.DeserializeObject<Sensor>(json_doc));
                         command = command.Substring(command.IndexOf("$") + 1);
 
-                        listBox1.Invoke(() => listBox1.Items.Add(sensorsList[i].getString()));
+                        dataGridViewSensors.Invoke(() => dataGridViewSensors.Rows.Add(sensorsList[i].getDataForDataGrid()));
                     }
                 }
 
@@ -200,7 +203,7 @@ namespace UAV_Security_System
                     bool isSensorExists = false;
                     for (int i = 0; i < sensorsList.Count; i++)
                     {
-                        if (sensorsList[i].getName() == tempName)
+                        if (sensorsList[i].getName() == tempName.Substring(0, 7))
                         {
                             isSensorExists = true;
                             break;
@@ -224,7 +227,7 @@ namespace UAV_Security_System
                             }
                         }
 
-                        label_new_sensor_name.Invoke(() => label_new_sensor_name.Text = "Имя: " + tempName);
+                        label_new_sensor_name.Invoke(() => label_new_sensor_name.Text = "Имя: " + tempName.Substring(0, 7) + "; Версия: " + tempName.Substring(7));
                         label_num_of_new_sensor.Invoke(() => label_num_of_new_sensor.Text = "Номер: " + tempNum);
                         label_new_sensor_vol.Invoke(() => label_new_sensor_vol.Text = "Напряжение: " + tempVol.ToString());
                         label_new_sensor_name.Invoke(() => label_new_sensor_name.Visible = true);
@@ -239,6 +242,8 @@ namespace UAV_Security_System
                         textBox_lon.Invoke(() => textBox_lon.Visible = true);
 
                         button_new_sensor_done.Invoke(() => button_new_sensor_done.Visible = true);
+
+                        tempName = tempName.Substring(0, 7);
                     }
                     else
                     {
@@ -313,6 +318,43 @@ namespace UAV_Security_System
             textBox_lat.Visible = false;
             textBox_lon.Visible = false;
             button_new_sensor_done.Visible = false;
+        }
+
+        private void dataGridViewSensors_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridViewSensors.SelectedRows.Count > 0)
+            {
+                button_del_sensor.Enabled = true;
+                button_edit_sensor.Enabled = true;
+            }
+            else
+            {
+                button_del_sensor.Enabled = false;
+                button_edit_sensor.Enabled = false;
+            }
+        }
+
+        private void button_del_sensor_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewSensors.SelectedRows.Count > 0)
+            {
+                int selectedSensor = Int32.Parse(dataGridViewSensors.CurrentRow.Cells[0].Value.ToString());
+                MessageBox.Show("Сейчас удалилось бы АУО с номером: " + selectedSensor.ToString());
+            }
+        }
+
+        private void button_edit_sensor_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewSensors.SelectedRows.Count > 0)
+            {
+                int selectedSensor = Int32.Parse(dataGridViewSensors.CurrentRow.Cells[0].Value.ToString());
+                MessageBox.Show("Сейчас началось бы изменение АУО с номером: " + selectedSensor.ToString());
+            }
+        }
+
+        private void button_del_all_sensors_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Сейчас удалились бы все АУО.");
         }
     }
 }

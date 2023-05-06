@@ -101,11 +101,6 @@ namespace UAV_Security_System
             return connectionFlag;
         }
 
-        public string getString()
-        {
-            return name + "; " + num + "; " + (lat / 10000000f) + "; " + (lon / 10000000f) + "; " + isSleeping + "; " + vol + "; " + batteryFlag + "; " + connectionFlag + ".";
-        }
-
         public string getStringForAdd()
         {
             string sleep = "false";
@@ -116,6 +111,38 @@ namespace UAV_Security_System
             string vol_str = vol.ToString();
             vol_str = vol_str.Replace(",", ".");
             return "\"name\":\"" + name + "\",\"num\":" + num + ",\"lat\":" + lat + ",\"lon\":" + lon + ",\"isSleeping\":" + sleep + ",\"vol\":" + vol_str + "";
+        }
+
+        public string[] getDataForDataGrid()
+        {
+            string batteryFlagString = "";
+            string connectionFlagString = "";
+            if (batteryFlag == 0)
+            {
+                batteryFlagString = "Высокий заряд";
+            }
+            else if (batteryFlag == 1)
+            {
+                batteryFlagString = "Низкий заряд";
+            }
+            else
+            {
+                batteryFlagString = "Критический заряд";
+            }
+            if (connectionFlag == 0)
+            {
+                connectionFlagString = "Хорошая связь";
+            }
+            else if (connectionFlag == 1)
+            {
+                connectionFlagString = "Проблемная связь";
+            }
+            else
+            {
+                connectionFlagString = "Связь потеряна";
+            }
+            string[] dataForReturn = {num.ToString(), name, isSleeping.ToString(), (lat / 10000000f).ToString(), (lon / 10000000f).ToString(), vol.ToString(), batteryFlagString, connectionFlagString};
+            return dataForReturn;
         }
     }
 }
