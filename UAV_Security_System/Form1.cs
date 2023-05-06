@@ -17,6 +17,7 @@ namespace UAV_Security_System
         private string tempName;
         private float tempVol;
         private int tempNum;
+        private int selectedSensorNum = -1;
 
         public Form1()
         {
@@ -127,6 +128,16 @@ namespace UAV_Security_System
                 if (command == "OK+DEL")
                 {
                     do_info_toast("АУО успешно удалено!", "Теперь его можно добавить заново");
+                }
+
+                if (command == "OK+DELALL")
+                {
+                    do_info_toast("Все АУО успешно удалены!", "Теперь можно добавить новые");
+                }
+
+                if (command == "OK+EDIT")
+                {
+                    do_info_toast("АУО успешно изменено!", "Теперь при его срабатывании БПЛА полетит по новым координатам");
                 }
             }
         }
@@ -241,10 +252,10 @@ namespace UAV_Security_System
 
                         label_sensor_loading_warning.Invoke(() => label_sensor_loading_warning.Visible = false);
 
-                        label_lat.Invoke(() => label_lat.Visible = true);
-                        label_lon.Invoke(() => label_lon.Visible = true);
-                        textBox_lat.Invoke(() => textBox_lat.Visible = true);
-                        textBox_lon.Invoke(() => textBox_lon.Visible = true);
+                        label_lat_new.Invoke(() => label_lat_new.Visible = true);
+                        label_lon_new.Invoke(() => label_lon_new.Visible = true);
+                        textBox_lat_new.Invoke(() => textBox_lat_new.Visible = true);
+                        textBox_lon_new.Invoke(() => textBox_lon_new.Visible = true);
 
                         button_new_sensor_done.Invoke(() => button_new_sensor_done.Visible = true);
 
@@ -270,8 +281,8 @@ namespace UAV_Security_System
         {
             try
             {
-                float lat_float = float.Parse(textBox_lat.Text);
-                float lon_float = float.Parse(textBox_lon.Text);
+                float lat_float = float.Parse(textBox_lat_new.Text);
+                float lon_float = float.Parse(textBox_lon_new.Text);
                 long lat_long = (long)(lat_float * 10000000);
                 long lon_long = (long)(lon_float * 10000000);
                 if (lat_float >= -90 && lat_float <= 90 && lon_float >= -180 && lon_float <= 180)
@@ -318,10 +329,10 @@ namespace UAV_Security_System
             label_new_sensor_name.Visible = false;
             label_num_of_new_sensor.Visible = false;
             label_new_sensor_vol.Visible = false;
-            label_lat.Visible = false;
-            label_lon.Visible = false;
-            textBox_lat.Visible = false;
-            textBox_lon.Visible = false;
+            label_lat_new.Visible = false;
+            label_lon_new.Visible = false;
+            textBox_lat_new.Visible = false;
+            textBox_lon_new.Visible = false;
             button_new_sensor_done.Visible = false;
         }
 
@@ -353,14 +364,62 @@ namespace UAV_Security_System
         {
             if (dataGridViewSensors.SelectedRows.Count > 0)
             {
-                int selectedSensorNum = Int32.Parse(dataGridViewSensors.CurrentRow.Cells[0].Value.ToString());
-                MessageBox.Show("Сейчас началось бы изменение АУО с номером: " + selectedSensorNum.ToString());
+                selectedSensorNum = Int32.Parse(dataGridViewSensors.CurrentRow.Cells[0].Value.ToString());
+                Sensor tempSensor = sensorsList[0];
+                for (int i = 0; i < sensorsList.Count; i++)
+                {
+                    if (sensorsList[i].getNum() == selectedSensorNum)
+                    {
+                        tempSensor = sensorsList[i];
+                        break;
+                    }
+                }
+                label_edit_sensor_name.Text = "Имя: " + tempSensor.getName();
+                label_edit_sensor_num.Text = "Номер: " + tempSensor.getNum();
+                textBox_lat_edit.Text = (tempSensor.getLat() / 10000000f).ToString("##.################");
+                textBox_lon_edit.Text = (tempSensor.getLon() / 10000000f).ToString("###.################");
+                groupBox_edit_sensor.Visible = true;
+                button_edit_sensor.Enabled = false;
+                button_del_sensor.Enabled = false;
+                button_del_all_sensors.Enabled = false;
             }
+        }
+
+        private void button_edit_sensor_done_Click(object sender, EventArgs e)
+        {
+            float lat_float = float.Parse(textBox_lat_edit.Text);
+            float lon_float = float.Parse(textBox_lon_edit.Text);
+            long lat_long = (long)(lat_float * 10000000);
+            long lon_long = (long)(lon_float * 10000000);
+            if (lat_float >= -90 && lat_float <= 90 && lon_float >= -180 && lon_float <= 180)
+            {
+                serialPortServer.Write("{\"type\":\"edit_sensor\",\"num\":" + selectedSensorNum + ",\"lat\":" + lat_long + ",\"lon\":" + lon_long + "}#");
+                serialPortServer.Write("{\"type\":\"get_all_sensors\"}#");
+
+                groupBox_edit_sensor.Visible = false;
+                button_edit_sensor.Enabled = true;
+                button_del_sensor.Enabled = true;
+                button_del_all_sensors.Enabled = true;
+            }
+            else
+            {
+                MessageBox.Show("lat может принимать значения от -90 до 90; lon - от -180 до 180!");
+            }
+        }
+
+        private void button_cancel_edit_sensor_Click(object sender, EventArgs e)
+        {
+            groupBox_edit_sensor.Visible = false;
+            button_edit_sensor.Enabled = true;
+            button_del_sensor.Enabled = true;
+            button_del_all_sensors.Enabled = true;
         }
 
         private void button_del_all_sensors_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Сейчас удалились бы все АУО.");
+            serialPortServer.Write("{\"type\":\"del_all_sensors\"}#");
+            serialPortServer.Write("{\"type\":\"get_all_sensors\"}#");
+
         }
 
         private void do_info_toast(string title, string text)
