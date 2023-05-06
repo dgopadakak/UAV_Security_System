@@ -4,6 +4,7 @@ using System.Threading;
 using System.Text.Json;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace UAV_Security_System
 {
@@ -120,8 +121,13 @@ namespace UAV_Security_System
 
                 if (command == "OK+ADD")     // Пришел ответ о добавлении датчика
                 {
-                    MessageBox.Show("АУО успешно добавлено!");
+                    do_info_toast("АУО успешно добавлено!", "Осталось вывести его из спящего режима");
                     serialPortServer.Write("{\"type\":\"get_all_sensors\"}#");
+                }
+
+                if (command == "OK+DEL")
+                {
+
                 }
             }
         }
@@ -255,6 +261,7 @@ namespace UAV_Security_System
                 {
                     if (command == "OK+" + tempNum)
                     {
+                        do_info_toast("Установка номера АУО прошла успешно!", "Теперь АУО готово к общению");
                         MessageBox.Show("Установка номера прошла успешно!");
                     }
                 }
@@ -355,6 +362,17 @@ namespace UAV_Security_System
         private void button_del_all_sensors_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Сейчас удалились бы все АУО.");
+        }
+
+        private void do_info_toast(string title, string text)
+        {
+            NotifyIcon NI = new NotifyIcon();
+            NI.BalloonTipText = text;
+            NI.BalloonTipTitle = title;
+            NI.BalloonTipIcon = ToolTipIcon.Info;
+            NI.Icon = Icon;
+            NI.Visible = true;
+            NI.ShowBalloonTip(5);   // Что за число? На время не похоже
         }
     }
 }
