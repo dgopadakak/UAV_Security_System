@@ -144,5 +144,31 @@ namespace UAV_Security_System
             string[] dataForReturn = {num.ToString(), name, isSleeping.ToString(), (lat / 10000000f).ToString(), (lon / 10000000f).ToString(), vol.ToString(), batteryFlagString, connectionFlagString};
             return dataForReturn;
         }
+
+        public Color GetColorForBatteryFlag()
+        {
+            if (batteryFlag == 0)
+            {
+                return Color.Green;
+            }
+            if (batteryFlag == 1)
+            {
+                return Color.Yellow;
+            }
+            return Color.Red;
+        }
+
+        public Color GetColorForConnectionFlag()
+        {
+            if(connectionFlag == 0)
+            {
+                return Color.Green;
+            }
+            if (connectionFlag == 1)
+            {
+                return Color.Yellow;
+            }
+            return Color.Red;
+        }
     }
 }

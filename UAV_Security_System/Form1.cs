@@ -116,6 +116,8 @@ namespace UAV_Security_System
                         command = command.Substring(command.IndexOf("$") + 1);
 
                         dataGridViewSensors.Invoke(() => dataGridViewSensors.Rows.Add(sensorsList[i].getDataForDataGrid()));
+                        dataGridViewSensors.Invoke(() => dataGridViewSensors.Rows[i].Cells[6].Style.BackColor = sensorsList[i].GetColorForBatteryFlag());
+                        dataGridViewSensors.Invoke(() => dataGridViewSensors.Rows[i].Cells[7].Style.BackColor = sensorsList[i].GetColorForConnectionFlag());
                     }
                 }
 
