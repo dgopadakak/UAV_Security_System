@@ -60,7 +60,7 @@ namespace UAV_Security_System
                 {
                     string? selected_com_port = comboBox1.SelectedItem.ToString();
                     label_selected_com.Text = "Выбранный порт: " + selected_com_port;
-                    serialPortServer = new SerialPort(selected_com_port, 9600);
+                    serialPortServer = new SerialPort(selected_com_port, 115200);
                     serialPortServer.Open();
                     serialPortServer.DataReceived += new SerialDataReceivedEventHandler(ServerDataReceivedHandler);
                     Thread.Sleep(1100);
@@ -76,6 +76,7 @@ namespace UAV_Security_System
                     button_del_all_sensors.Visible = true;
                     button_edit_sensor.Visible = true;
                     button_add_sensor.Visible = true;
+                    button_go_sleep_unsleep.Visible = true;
                 }
                 catch
                 {
@@ -97,7 +98,7 @@ namespace UAV_Security_System
 
         private void Parse_server_data()
         {
-            if (inStringServer.IndexOf("#") != -1)
+            while (inStringServer.IndexOf("#") != -1)
             {
                 String command = inStringServer.Substring(0, inStringServer.IndexOf("#"));
                 inStringServer = inStringServer.Substring(inStringServer.IndexOf("#") + 1);
@@ -206,7 +207,7 @@ namespace UAV_Security_System
 
         private void Parse_sensor_data()
         {
-            if (inStringSensor.IndexOf("#") != -1)
+            while (inStringSensor.IndexOf("#") != -1)
             {
                 String command = inStringSensor.Substring(0, inStringSensor.IndexOf("#"));
                 inStringSensor = inStringSensor.Substring(inStringSensor.IndexOf("#") + 1);
@@ -261,7 +262,7 @@ namespace UAV_Security_System
 
                         button_new_sensor_done.Invoke(() => button_new_sensor_done.Visible = true);
 
-                        tempName = tempName.Substring(0, 7);
+                        //tempName = tempName.Substring(0, 7);
                     }
                     else
                     {
