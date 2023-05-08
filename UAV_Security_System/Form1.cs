@@ -142,6 +142,44 @@ namespace UAV_Security_System
                 {
                     do_info_toast("АУО успешно изменено!", "Теперь при его срабатывании БПЛА полетит по новым координатам");
                 }
+
+                if (command.IndexOf("WARNING+") != -1)
+                {
+                    string name_of_warning_sensor = command.Substring(command.IndexOf("+") + 1);
+                    int num_of_warning_sensor = -1;
+                    int index_of_warning_sensor = -1;
+                    for (int i = 0; i < sensorsList.Count; i++)
+                    {
+                        if (sensorsList[i].getName() == name_of_warning_sensor)
+                        {
+                            num_of_warning_sensor = sensorsList[i].getNum();
+                            index_of_warning_sensor = i;
+                            break;
+                        }
+                    }
+                    dataGridViewSensors.Rows[index_of_warning_sensor].Selected = true;
+                    do_warning_toast("Внимание! Сработало АУО!", "Сработало АУО под номером " + num_of_warning_sensor + ". Координаты цели загружены в БПЛА");
+                    MessageBox.Show("Внимание! Сработало АУО под номером " + num_of_warning_sensor + ". Координаты цели загружены в БПЛА. Произведите взлет и переключите БПЛА в режим полета по точкам.");
+                }
+
+                if (command.IndexOf("WARNINGERROR+") != -1)
+                {
+                    string name_of_warning_sensor = command.Substring(command.IndexOf("+") + 1);
+                    int num_of_warning_sensor = -1;
+                    int index_of_warning_sensor = -1;
+                    for (int i = 0; i < sensorsList.Count; i++)
+                    {
+                        if (sensorsList[i].getName() == name_of_warning_sensor)
+                        {
+                            num_of_warning_sensor = sensorsList[i].getNum();
+                            index_of_warning_sensor = i;
+                            break;
+                        }
+                    }
+                    dataGridViewSensors.Rows[index_of_warning_sensor].Selected = true;
+                    do_error_toast("Внимание! Ошибка загрузки координат цели!", "Сработало АУО под номером " + num_of_warning_sensor + ", но координаты цели НЕ загружены в БПЛА");
+                    MessageBox.Show("Внимание! Ошибка загрузки координат цели! Сработало АУО под номером " + num_of_warning_sensor + ", но координаты цели НЕ загружены в БПЛА. Произведите попытку взлета и полета к цели в ручном режиме.");
+                }
             }
         }
 
@@ -431,6 +469,28 @@ namespace UAV_Security_System
             NI.BalloonTipText = text;
             NI.BalloonTipTitle = title;
             NI.BalloonTipIcon = ToolTipIcon.Info;
+            NI.Icon = Icon;
+            NI.Visible = true;
+            NI.ShowBalloonTip(2);
+        }
+
+        private void do_warning_toast(string title, string text)
+        {
+            NotifyIcon NI = new NotifyIcon();
+            NI.BalloonTipText = text;
+            NI.BalloonTipTitle = title;
+            NI.BalloonTipIcon= ToolTipIcon.Warning;
+            NI.Icon = Icon;
+            NI.Visible = true;
+            NI.ShowBalloonTip(2);
+        }
+
+        private void do_error_toast(string title, string text)
+        {
+            NotifyIcon NI = new NotifyIcon();
+            NI.BalloonTipText = text;
+            NI.BalloonTipTitle = title;
+            NI.BalloonTipIcon = ToolTipIcon.Error;
             NI.Icon = Icon;
             NI.Visible = true;
             NI.ShowBalloonTip(2);
