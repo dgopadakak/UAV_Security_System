@@ -79,7 +79,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(474, 12);
+            button1.Location = new Point(476, 12);
             button1.Name = "button1";
             button1.Size = new Size(111, 23);
             button1.TabIndex = 0;
@@ -129,7 +129,7 @@
             // 
             // button_add_sensor
             // 
-            button_add_sensor.Location = new Point(591, 11);
+            button_add_sensor.Location = new Point(593, 12);
             button_add_sensor.Name = "button_add_sensor";
             button_add_sensor.Size = new Size(96, 23);
             button_add_sensor.TabIndex = 6;
@@ -304,7 +304,7 @@
             dataGridViewSensors.RowHeadersVisible = false;
             dataGridViewSensors.RowTemplate.Height = 25;
             dataGridViewSensors.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewSensors.Size = new Size(675, 539);
+            dataGridViewSensors.Size = new Size(677, 539);
             dataGridViewSensors.TabIndex = 12;
             dataGridViewSensors.Visible = false;
             dataGridViewSensors.SelectionChanged += dataGridViewSensors_SelectionChanged;
@@ -474,7 +474,7 @@
             button_del_sensor.Enabled = false;
             button_del_sensor.Location = new Point(417, 586);
             button_del_sensor.Name = "button_del_sensor";
-            button_del_sensor.Size = new Size(156, 23);
+            button_del_sensor.Size = new Size(158, 23);
             button_del_sensor.TabIndex = 14;
             button_del_sensor.Text = "Удалить выделенное АУО";
             button_del_sensor.UseVisualStyleBackColor = true;
@@ -495,7 +495,7 @@
             // 
             // button_del_all_sensors
             // 
-            button_del_all_sensors.Location = new Point(579, 586);
+            button_del_all_sensors.Location = new Point(581, 586);
             button_del_all_sensors.Name = "button_del_all_sensors";
             button_del_all_sensors.Size = new Size(108, 23);
             button_del_all_sensors.TabIndex = 16;

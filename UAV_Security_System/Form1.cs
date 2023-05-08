@@ -248,7 +248,7 @@ namespace UAV_Security_System
 
                         label_new_sensor_name.Invoke(() => label_new_sensor_name.Text = "Имя: " + tempName.Substring(0, 7) + "; Версия: " + tempName.Substring(7));
                         label_num_of_new_sensor.Invoke(() => label_num_of_new_sensor.Text = "Номер: " + tempNum);
-                        label_new_sensor_vol.Invoke(() => label_new_sensor_vol.Text = "Напряжение: " + tempVol.ToString());
+                        label_new_sensor_vol.Invoke(() => label_new_sensor_vol.Text = "Напряжение: " + tempVol.ToString() + "В");
                         label_new_sensor_name.Invoke(() => label_new_sensor_name.Visible = true);
                         label_num_of_new_sensor.Invoke(() => label_num_of_new_sensor.Visible = true);
                         label_new_sensor_vol.Invoke(() => label_new_sensor_vol.Visible = true);
