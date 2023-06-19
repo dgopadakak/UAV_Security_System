@@ -26,6 +26,8 @@ namespace UAV_Security_System
             update_com_ports();
         }
 
+        #region Процесс подключения к серверу
+
         private void button1_Click(object sender, EventArgs e)
         {
             serialPortServer.Write("{\"type\":\"get_all_sensors\"}#");
@@ -34,22 +36,6 @@ namespace UAV_Security_System
         private void button_update_com_Click(object sender, EventArgs e)
         {
             update_com_ports();
-        }
-
-        private void update_com_ports()
-        {
-            comboBox1.Items.Clear();
-            comboBox_sensor_com.Items.Clear();
-            string[] ports = SerialPort.GetPortNames();
-            foreach (string port in ports)
-            {
-                comboBox1.Items.Add(port);
-                comboBox_sensor_com.Items.Add(port);
-            }
-            comboBox_sensor_com.SelectedIndex = -1;
-            comboBox1.SelectedIndex = -1;
-            comboBox_sensor_com.Text = "Выберите COM порт";
-            comboBox1.Text = "Выберите COM порт";
         }
 
         private void button_accept_com_Click(object sender, EventArgs e)
@@ -88,6 +74,10 @@ namespace UAV_Security_System
                 MessageBox.Show("Выберите COM порт!");
             }
         }
+
+        #endregion
+
+        #region Получение и обработка данных от сервера
 
         private void ServerDataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
@@ -183,58 +173,9 @@ namespace UAV_Security_System
             }
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (serialPortServer != null)
-            {
-                if (serialPortServer.IsOpen)
-                {
-                    serialPortServer.Close();
-                }
-            }
-            if (serialPortSensor != null)
-            {
-                if (serialPortSensor.IsOpen)
-                {
-                    serialPortSensor.Close();
-                }
-            }
-        }
+        #endregion
 
-        private void button_add_sensor_Click(object sender, EventArgs e)
-        {
-            update_com_ports();
-            button_add_sensor.Visible = false;
-            groupBox_new_sensor.Visible = true;
-        }
-
-        private void button_accept_sensor_com_Click(object sender, EventArgs e)
-        {
-            if (comboBox_sensor_com.SelectedIndex != -1)
-            {
-                try
-                {
-                    comboBox_sensor_com.Enabled = false;
-                    button_update_com2.Enabled = false;
-                    button_accept_sensor_com.Enabled = false;
-                    label_sensor_loading_warning.Visible = true;
-
-                    serialPortSensor = new SerialPort(comboBox_sensor_com.SelectedItem.ToString(), 9600);
-                    serialPortSensor.Open();
-                    serialPortSensor.DataReceived += new SerialDataReceivedEventHandler(SensorDataReceivedHandler);
-                    Thread.Sleep(1500);
-                    serialPortSensor.Write("{\"type\":\"get_data_for_connect\"}#");
-                }
-                catch
-                {
-                    MessageBox.Show("Неполадки с выбранным портом!");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Выберите COM порт!");
-            }
-        }
+        #region Получение и обработка данных от АУО
 
         private void SensorDataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
@@ -318,6 +259,45 @@ namespace UAV_Security_System
             }
         }
 
+        #endregion
+
+        #region Процесс добавления нового АУО
+
+        private void button_add_sensor_Click(object sender, EventArgs e)
+        {
+            update_com_ports();
+            button_add_sensor.Visible = false;
+            groupBox_new_sensor.Visible = true;
+        }
+
+        private void button_accept_sensor_com_Click(object sender, EventArgs e)
+        {
+            if (comboBox_sensor_com.SelectedIndex != -1)
+            {
+                try
+                {
+                    comboBox_sensor_com.Enabled = false;
+                    button_update_com2.Enabled = false;
+                    button_accept_sensor_com.Enabled = false;
+                    label_sensor_loading_warning.Visible = true;
+
+                    serialPortSensor = new SerialPort(comboBox_sensor_com.SelectedItem.ToString(), 9600);
+                    serialPortSensor.Open();
+                    serialPortSensor.DataReceived += new SerialDataReceivedEventHandler(SensorDataReceivedHandler);
+                    Thread.Sleep(1500);
+                    serialPortSensor.Write("{\"type\":\"get_data_for_connect\"}#");
+                }
+                catch
+                {
+                    MessageBox.Show("Неполадки с выбранным портом!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выберите COM порт!");
+            }
+        }
+
         private void button_new_sensor_done_Click(object sender, EventArgs e)
         {
             try
@@ -377,29 +357,9 @@ namespace UAV_Security_System
             button_new_sensor_done.Visible = false;
         }
 
-        private void dataGridViewSensors_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dataGridViewSensors.SelectedRows.Count > 0)
-            {
-                button_del_sensor.Enabled = true;
-                button_edit_sensor.Enabled = true;
-            }
-            else
-            {
-                button_del_sensor.Enabled = false;
-                button_edit_sensor.Enabled = false;
-            }
-        }
+        #endregion
 
-        private void button_del_sensor_Click(object sender, EventArgs e)
-        {
-            if (dataGridViewSensors.SelectedRows.Count > 0)
-            {
-                int selectedSensorNum = Int32.Parse(dataGridViewSensors.CurrentRow.Cells[0].Value.ToString());
-                serialPortServer.Write("{\"type\":\"del_sensor\",\"num\":" + selectedSensorNum + "}#");
-                serialPortServer.Write("{\"type\":\"get_all_sensors\"}#");
-            }
-        }
+        #region Процесс изменения координат АУО
 
         private void button_edit_sensor_Click(object sender, EventArgs e)
         {
@@ -456,12 +416,29 @@ namespace UAV_Security_System
             button_del_all_sensors.Enabled = true;
         }
 
+        #endregion
+
+        #region Процесс удаления АУО
+
+        private void button_del_sensor_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewSensors.SelectedRows.Count > 0)
+            {
+                int selectedSensorNum = Int32.Parse(dataGridViewSensors.CurrentRow.Cells[0].Value.ToString());
+                serialPortServer.Write("{\"type\":\"del_sensor\",\"num\":" + selectedSensorNum + "}#");
+                serialPortServer.Write("{\"type\":\"get_all_sensors\"}#");
+            }
+        }
+
         private void button_del_all_sensors_Click(object sender, EventArgs e)
         {
             serialPortServer.Write("{\"type\":\"del_all_sensors\"}#");
             serialPortServer.Write("{\"type\":\"get_all_sensors\"}#");
-
         }
+
+        #endregion
+
+        #region Вывод тостов (уведомлений)
 
         private void do_info_toast(string title, string text)
         {
@@ -494,6 +471,56 @@ namespace UAV_Security_System
             NI.Icon = Icon;
             NI.Visible = true;
             NI.ShowBalloonTip(2);
+        }
+
+        #endregion
+
+        private void update_com_ports()
+        {
+            comboBox1.Items.Clear();
+            comboBox_sensor_com.Items.Clear();
+            string[] ports = SerialPort.GetPortNames();
+            foreach (string port in ports)
+            {
+                comboBox1.Items.Add(port);
+                comboBox_sensor_com.Items.Add(port);
+            }
+            comboBox_sensor_com.SelectedIndex = -1;
+            comboBox1.SelectedIndex = -1;
+            comboBox_sensor_com.Text = "Выберите COM порт";
+            comboBox1.Text = "Выберите COM порт";
+        }
+
+        private void dataGridViewSensors_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridViewSensors.SelectedRows.Count > 0)
+            {
+                button_del_sensor.Enabled = true;
+                button_edit_sensor.Enabled = true;
+            }
+            else
+            {
+                button_del_sensor.Enabled = false;
+                button_edit_sensor.Enabled = false;
+            }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (serialPortServer != null)
+            {
+                if (serialPortServer.IsOpen)
+                {
+                    serialPortServer.Close();
+                }
+            }
+            if (serialPortSensor != null)
+            {
+                if (serialPortSensor.IsOpen)
+                {
+                    serialPortSensor.Close();
+                }
+            }
         }
     }
 }
