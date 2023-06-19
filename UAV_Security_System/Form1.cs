@@ -135,7 +135,7 @@ namespace UAV_Security_System
 
                 if (command.IndexOf("WARNING+") != -1)
                 {
-                    string name_of_warning_sensor = command.Substring(command.IndexOf("+") + 1);
+                    string name_of_warning_sensor = command.Substring(command.IndexOf("+") + 1, 7);
                     int num_of_warning_sensor = -1;
                     int index_of_warning_sensor = -1;
                     for (int i = 0; i < sensorsList.Count; i++)
@@ -154,7 +154,7 @@ namespace UAV_Security_System
 
                 if (command.IndexOf("WARNINGERROR+") != -1)
                 {
-                    string name_of_warning_sensor = command.Substring(command.IndexOf("+") + 1);
+                    string name_of_warning_sensor = command.Substring(command.IndexOf("+") + 1, 7);
                     int num_of_warning_sensor = -1;
                     int index_of_warning_sensor = -1;
                     for (int i = 0; i < sensorsList.Count; i++)
