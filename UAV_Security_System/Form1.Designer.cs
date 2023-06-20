@@ -513,6 +513,7 @@
             button_go_sleep_unsleep.Text = "Усыпить/разбудить выделенное АУО";
             button_go_sleep_unsleep.UseVisualStyleBackColor = true;
             button_go_sleep_unsleep.Visible = false;
+            button_go_sleep_unsleep.Click += button_go_sleep_unsleep_Click;
             // 
             // Form1
             // 

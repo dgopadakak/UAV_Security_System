@@ -308,7 +308,7 @@ namespace UAV_Security_System
                 long lon_long = (long)(lon_float * 10000000);
                 if (lat_float >= -90 && lat_float <= 90 && lon_float >= -180 && lon_float <= 180)
                 {
-                    serialPortSensor.Write("{\"type\":\"sleep\",\"name\":\"" + tempName + "\"}#");
+                    serialPortSensor.Write("{\"type\":\"sleep\",\"name\":\"" + tempName.Substring(0, 7) + "\"}#");
                     serialPortSensor.Write("{\"type\":\"set_num\",\"num\":" + tempNum + "}#");
                     Sensor tempSensor = new Sensor(tempName, tempNum, lat_long, lon_long, true, tempVol, 0, 0);
                     serialPortServer.Write("{\"type\":\"add_sensor\"," + tempSensor.getStringForAdd() + "}#");
@@ -438,6 +438,19 @@ namespace UAV_Security_System
 
         #endregion
 
+        #region Усыпление/пробуждение АУО
+
+        private void button_go_sleep_unsleep_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewSensors.SelectedRows.Count > 0)
+            {
+                int selectedSensorNum = Int32.Parse(dataGridViewSensors.CurrentRow.Cells[0].Value.ToString());
+                serialPortServer.Write("{\"type\":\"change_work_mode\",\"num\":" + selectedSensorNum + "}#");
+            }
+        }
+
+        #endregion
+
         #region Вывод тостов (уведомлений)
 
         private void do_info_toast(string title, string text)
@@ -456,7 +469,7 @@ namespace UAV_Security_System
             NotifyIcon NI = new NotifyIcon();
             NI.BalloonTipText = text;
             NI.BalloonTipTitle = title;
-            NI.BalloonTipIcon= ToolTipIcon.Warning;
+            NI.BalloonTipIcon = ToolTipIcon.Warning;
             NI.Icon = Icon;
             NI.Visible = true;
             NI.ShowBalloonTip(2);
